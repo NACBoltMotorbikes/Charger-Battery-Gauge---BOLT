@@ -1,5 +1,5 @@
 const int LED[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-const int LED_THRESHOLD[9] = {27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37};
+const int LED_THRESHOLD[10] = {28, 29, 30, 31, 32, 33, 34, 35, 36, 37};
 #define CUTT_OFF 10
 #define VOLTAGE_IN A1
 #define VOLTAGE_AVERAGES 20
@@ -10,13 +10,14 @@ int voltageValue[VOLTAGE_AVERAGES];
 int voltageSig = 0;
 int voltageValueCount = 0;
 uint32_t voltageTotal = 0;
+int prevVoltageSig = 0;
 
 void setup() {
   // put your setup code here, to run once:
 
   Serial.begin(9600);
   
-  //setup LED and CUTT_OFF pins
+  //setup LED and CUTT_OFF Pins
   pinMode(LED[0], OUTPUT);
   pinMode(LED[1], OUTPUT);
   pinMode(LED[2], OUTPUT);
@@ -26,10 +27,9 @@ void setup() {
   pinMode(LED[6], OUTPUT);
   pinMode(LED[7], OUTPUT);
   pinMode(LED[8], OUTPUT);
-  pinMode(LED[1], OUTPUT);
   pinMode(CUTT_OFF, OUTPUT);
 
-  //Flashes each LED once then blinks all twice
+  //Blink each LED once then Flash all LEDs twice
   digitalWrite(LED[0], HIGH);
   delay(100);
   digitalWrite(LED[0], LOW);
@@ -117,6 +117,20 @@ void loop() {
 
   else {
     voltageValueCount = 0;
+  }
+
+  if (abs(voltageSig - prevVoltageSig) >= .1) {
+    for (int i = 0; i < 9; i++) {
+      if (voltageSig < LED_THRESHOLD[i]) {
+        break;
+      }
+      else {
+        digitalWrite(LED[i], HIGH);
+      }
+    }
+  }
+  else{
+    prevVoltageSig = voltageSig;
   }
 
 }
