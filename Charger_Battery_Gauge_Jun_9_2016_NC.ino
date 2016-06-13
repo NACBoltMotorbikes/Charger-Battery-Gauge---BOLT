@@ -1,9 +1,9 @@
 const int LED[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 const int LED_THRESHOLD[10] = {28, 29, 30, 31, 32, 33, 34, 35, 36, 37};
-#define CUTT_OFF 10
+#define CUT_OFF 10
 #define VOLTAGE_IN A1
 #define VOLTAGE_AVERAGES 20
-#define CUTT_OFF_THRESHOLD 35
+#define CUT_OFF_THRESHOLD 35
 
 //Voltage Averaging
 int voltageValue[VOLTAGE_AVERAGES];
@@ -27,7 +27,10 @@ void setup() {
   pinMode(LED[6], OUTPUT);
   pinMode(LED[7], OUTPUT);
   pinMode(LED[8], OUTPUT);
-  pinMode(CUTT_OFF, OUTPUT);
+  pinMode(CUT_OFF, OUTPUT);
+  
+  //turn on transistor
+  digitalWrite(CUT_OFF, HIGH);
 
   //Blink each LED once then Flash all LEDs twice
   digitalWrite(LED[0], HIGH);
@@ -120,17 +123,21 @@ void loop() {
   }
 
   if (abs(voltageSig - prevVoltageSig) >= .1) {
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 10; i++) {
       if (voltageSig < LED_THRESHOLD[i]) {
         break;
       }
       else {
-        digitalWrite(LED[i], HIGH);
+        digitalWrite(LED[(i - 1)], HIGH);
       }
     }
   }
   else{
     prevVoltageSig = voltageSig;
+  }
+  
+  if(voltageSig > CUT_OFF_THRESHOLD){
+    digitalWrite(CUT_OFF, LOW);
   }
 
 }
