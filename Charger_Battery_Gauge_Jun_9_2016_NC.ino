@@ -16,7 +16,8 @@ void setup() {
   // put your setup code here, to run once:
 
   Serial.begin(9600);
-
+  
+  //setup LED and CUTT_OFF Pins
   pinMode(LED[0], OUTPUT);
   pinMode(LED[1], OUTPUT);
   pinMode(LED[2], OUTPUT);
@@ -26,9 +27,9 @@ void setup() {
   pinMode(LED[6], OUTPUT);
   pinMode(LED[7], OUTPUT);
   pinMode(LED[8], OUTPUT);
-  pinMode(LED[1], OUTPUT);
   pinMode(CUTT_OFF, OUTPUT);
 
+  //Blink each LED once then Flash all LEDs twice
   digitalWrite(LED[0], HIGH);
   delay(100);
   digitalWrite(LED[0], LOW);
